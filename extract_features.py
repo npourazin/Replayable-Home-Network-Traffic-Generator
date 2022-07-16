@@ -1,20 +1,10 @@
 import dpkt
+
 # import pandas as pd
 # import json
 # from scapy.all import *
-import socket
-
-
-def get_packet_src(pac):
-    if hasattr(pac, 'src'):
-        # print("source_ip", socket.inet_ntoa(ip.src))
-        return socket.inet_ntoa(pac.src)
-
-
-def get_packet_dst(pac):
-    if hasattr(pac, 'dst'):
-        # print("destination_ip", socket.inet_ntoa(ip.src))
-        return socket.inet_ntoa(pac.dst)
+# from connectivity_features import get_packet_src_ip, get_packet_dst_ip, get_packet_dst_port, get_packet_src_port
+from connectivity_features import *
 
 
 def extract_features_from_pcap(pcap_file):
@@ -30,14 +20,14 @@ def extract_features_from_pcap(pcap_file):
             eth = dpkt.ethernet.Ethernet(buf)
             count = count + 1
         except:
+            print("Non-IP Packet types are not supported.")
             count = count + 1
-            continue  # If packet format is not readable by dpkt,
-        ip = eth.data
-        src = get_packet_src(ip)
-        dst = get_packet_dst(ip)
-        print("packet No.", count)
-        print("src: ", src)
-        print("dst: ", dst)
+            continue
+        ip_packet = eth.data
+        # print(ip_packet.data)
+        print("packet No.", count, ":")
+        print("-- src: ", get_packet_src_ip(ip_packet), ":", get_packet_src_port(ip_packet))
+        print("-- dst: ", get_packet_dst_ip(ip_packet), ":", get_packet_dst_port(ip_packet))
 
 
 if __name__ == '__main__':
