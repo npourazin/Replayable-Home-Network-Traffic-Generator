@@ -131,3 +131,7 @@ dmypy.json
 
 #pycharm IDE settings
 .idea/
+
+
+# test files
+test.pcap
