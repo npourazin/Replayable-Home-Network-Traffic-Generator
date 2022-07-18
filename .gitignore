@@ -135,4 +135,6 @@ dmypy.json
 
 # test files
 test.pcap
+test2.pcap
 test_iterator.py
+test_outputs/

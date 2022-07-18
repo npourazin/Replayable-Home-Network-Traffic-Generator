@@ -13,6 +13,8 @@ from connectivity_features import *
 scapy_pcap_reader = None
 packet_number = 0
 
+start_time = time.time()
+
 
 def get_next_n_packets(count=0, store=1, timeout=None):
     # f = open(pcap_file, 'rb')
@@ -59,6 +61,16 @@ def get_next_n_packets(count=0, store=1, timeout=None):
             c += 1
             packet_number += 1
 
+            if packet_number == int(count / 10):
+                print("time elapsed: {:.2f}s".format(time.time() - start_time))
+                print(packet_number)
+            if packet_number == int(2 * count / 10):
+                print("time elapsed: {:.2f}s".format(time.time() - start_time))
+                print(packet_number)
+            if packet_number == int(3 * count / 10):
+                print("time elapsed: {:.2f}s".format(time.time() - start_time))
+                print(packet_number)
+
             if 0 < count <= c:
                 break
         except KeyboardInterrupt or EOFError:
@@ -98,14 +110,18 @@ def get_ip_and_port_of_packet_src_and_dst(pacs):
 
 
 if __name__ == '__main__':
-    pcap_file = "test.pcap"
+    pcap_file = "test2.pcap"
     scapy_pcap_reader = PcapReader(pcap_file)
-    # eee = get_next_n_packets(count=1)
-    pacs = get_next_n_packets(count=10)
-    print("Packet list:", pacs, "\n\n")
+    # pacs = get_next_n_packets(count=10)
+    pacs = get_next_n_packets(count=701180)
+    print("time elapsed: {:.2f}s".format(time.time() - start_time))
+    # print("Packet list:", pacs, "\n\n")
     pac0 = pacs[0]
     print("First packet of the list:")
     pac0.show()
     print("\n\n\n\n\n\n")
     get_ip_and_port_of_packet_src_and_dst(pacs)
+
+    print("\n\n\n\n\n\n")
+    print("time elapsed: {:.2f}s".format(time.time() - start_time))
 # print(pac.layers()[1])
