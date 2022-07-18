@@ -1,34 +1,111 @@
+import time
+
 import dpkt
 
 # import pandas as pd
 # import json
-# from scapy.all import *
+from scapy.all import *
 # from connectivity_features import get_packet_src_ip, get_packet_dst_ip, get_packet_dst_port, get_packet_src_port
+from scapy.utils import PcapReader
+
 from connectivity_features import *
 
+scapy_pcap_reader = None
+packet_number = 0
 
-def extract_features_from_pcap(pcap_file):
-    f = open(pcap_file, 'rb')
-    pcap = dpkt.pcap.Reader(f)
-    # Using SCAPY for Zigbee and blutooth ##
-    # scapy_pak = rdpcap(pcap_file)
-    count = 0
 
-    for ts, buf in pcap:
-        print("-----------------------------------------------------------------------")
+def get_next_n_packets(count=0, store=1, timeout=None):
+    # f = open(pcap_file, 'rb')
+    # pcap = dpkt.pcap.Reader(f)
+    # if offline is None:
+    #     if L2socket is None:
+    #         L2socket = conf.L2listen
+    #     s = L2socket(type=ETH_P_ALL, *arg, **karg)
+    # else:
+    #     s = PcapReader(offline)
+
+    global scapy_pcap_reader
+    global packet_number
+    prev_c = -1
+    c = 0
+
+    lst = []
+    if timeout is not None:
+        stoptime = time.time() + timeout
+    remain = None
+
+    while True:
+        # print(prev_c, c)
+        if prev_c == c:
+            # End of File
+            break
+        prev_c = c
         try:
-            eth = dpkt.ethernet.Ethernet(buf)
-            count = count + 1
-        except:
-            print("Non-IP Packet types are not supported.")
-            count = count + 1
+            if timeout is not None:
+                remain = stoptime - time.time()
+                if remain <= 0:
+                    break
+
+            try:
+                p = scapy_pcap_reader.recv(MTU)
+            # except PcapTimeoutElapsed:
+            except:
+                continue
+            if p is None:
+                break
+            if store:
+                lst.append(p)
+
+            c += 1
+            packet_number += 1
+
+            if 0 < count <= c:
+                break
+        except KeyboardInterrupt or EOFError:
+            break
+
+    if prev_c == c:
+        scapy_pcap_reader.close()
+        print("all data parsed already")
+
+    return lst
+
+
+def get_next_packet(store=1, timeout=None):
+    lst = get_next_n_packets(count=1, store=store, timeout=timeout)
+    if len(lst) == 1:
+        return lst[0]
+    else:
+        print("Something went wrong. Wrong number of packets returned. expected 1, got", len(lst))
+        return None
+
+
+def get_ip_and_port_of_packet_src_and_dst(pacs):
+    for i in range(len(pacs)):
+        pac = pacs[i]
+        print("packet No.", i, ":")
+        # pac.show()
+        if hasattr(pac.payload, 'src') and hasattr(pac.payload, 'sport'):
+            print("-- src: ", pac.payload.src, ":", pac.payload.sport)
+        else:
+            print("-- Not an IP Packet")
             continue
-        ip_packet = eth.data
-        # print(ip_packet.data)
-        print("packet No.", count, ":")
-        print("-- src: ", get_packet_src_ip(ip_packet), ":", get_packet_src_port(ip_packet))
-        print("-- dst: ", get_packet_dst_ip(ip_packet), ":", get_packet_dst_port(ip_packet))
+        if hasattr(pac.payload, 'dst') and hasattr(pac.payload, 'dport'):
+            print("-- dst: ", pac.payload.dst, ":", pac.payload.dport)
+        else:
+            print("-- Not an IP Packet")
+            continue
 
 
 if __name__ == '__main__':
-    extract_features_from_pcap("test.pcap")
+    pcap_file = "test.pcap"
+    scapy_pcap_reader = PcapReader(pcap_file)
+    # eee = get_next_n_packets(count=1)
+    pacs = get_next_n_packets(count=10)
+    print("Packet list:", pacs, "\n\n")
+    pac0 = pacs[0]
+    print("First packet of the list:")
+    pac0.show()
+    print("\n\n\n\n\n\n")
+    get_ip_and_port_of_packet_src_and_dst(pacs)
+# print(pac.layers()[1])
