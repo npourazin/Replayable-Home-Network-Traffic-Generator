@@ -134,7 +134,7 @@ dmypy.json
 
 
 # test files
-test.pcap
-test2.pcap
+FeatureExtraction/TestFiles/test.pcap
+FeatureExtraction/TestFiles/
 test_iterator.py
 test_outputs/

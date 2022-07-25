@@ -1,14 +1,8 @@
-import time
-
-import dpkt
-
 # import pandas as pd
 # import json
 from scapy.all import *
 # from connectivity_features import get_packet_src_ip, get_packet_dst_ip, get_packet_dst_port, get_packet_src_port
 from scapy.utils import PcapReader
-
-from connectivity_features import *
 
 scapy_pcap_reader = None
 packet_number = 0
@@ -110,7 +104,7 @@ def get_ip_and_port_of_packet_src_and_dst(pacs):
 
 
 if __name__ == '__main__':
-    pcap_file = "test2.pcap"
+    pcap_file = "FeatureExtraction/TestFiles/test.pcap"
     scapy_pcap_reader = PcapReader(pcap_file)
     # pacs = get_next_n_packets(count=10)
     pacs = get_next_n_packets(count=701180)
