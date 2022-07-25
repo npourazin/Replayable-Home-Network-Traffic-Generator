@@ -7,13 +7,13 @@ import dpkt
 from FeatureExtraction.connectivity_features import *
 
 
-def extract_features_from_pcap(pcap_file):
+def extract_features_from_pcap_via_dpkt(pcap_file):
     f = open(pcap_file, 'rb')
     pcap = dpkt.pcap.Reader(f)
     # Using SCAPY for Zigbee and blutooth ##
     # scapy_pak = rdpcap(pcap_file)
     count = 0
-
+    out = []
     for ts, buf in pcap:
         print("-----------------------------------------------------------------------")
         try:
@@ -28,7 +28,19 @@ def extract_features_from_pcap(pcap_file):
         print("packet No.", count, ":")
         print("-- src: ", get_packet_src_ip(ip_packet), ":", get_packet_src_port(ip_packet))
         print("-- dst: ", get_packet_dst_ip(ip_packet), ":", get_packet_dst_port(ip_packet))
+        out.append(
+            (ts,
+             get_packet_src_ip(ip_packet),
+             get_packet_src_port(ip_packet),
+             get_packet_dst_ip(ip_packet),
+             get_packet_dst_port(ip_packet),
+             # todo: packet size
+             # todo: List Format? Dict format?
+             )
+        )
+
+    return out
 
 
 if __name__ == '__main__':
-    extract_features_from_pcap("TestFiles/test.pcap")
+    extract_features_from_pcap_via_dpkt("TestFiles/test.pcap")

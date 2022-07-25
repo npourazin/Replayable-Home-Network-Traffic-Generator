@@ -103,11 +103,37 @@ def get_ip_and_port_of_packet_src_and_dst(pacs):
             continue
 
 
+def extract_features_from_pcap_via_scapy_iterator(pcap_file, buff_size=1):
+    global scapy_pcap_reader
+    scapy_pcap_reader = PcapReader(pcap_file)
+    pacs = get_next_n_packets(count=buff_size)
+    out = []
+
+    for pac in pacs:
+        if hasattr(pac.payload, 'src') \
+                and hasattr(pac.payload, 'sport') \
+                and hasattr(pac.payload, 'dst') \
+                and hasattr(pac.payload, 'dport') \
+                and hasattr(pac, 'time'):
+            out.append(
+                (pac.time,
+                 pac.payload.src,
+                 pac.payload.sport,
+                 pac.payload.dst,
+                 pac.payload.dport,
+                 # todo: packet size
+                 # todo: List Format? Dict format?
+                 )
+            )
+
+    return out
+
+
 if __name__ == '__main__':
     pcap_file = "FeatureExtraction/TestFiles/test.pcap"
     scapy_pcap_reader = PcapReader(pcap_file)
     # pacs = get_next_n_packets(count=10)
-    pacs = get_next_n_packets(count=701180)
+    pacs = get_next_n_packets(count=70)
     print("time elapsed: {:.2f}s".format(time.time() - start_time))
     # print("Packet list:", pacs, "\n\n")
     pac0 = pacs[0]
