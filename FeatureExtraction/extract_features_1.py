@@ -1,3 +1,5 @@
+import time
+
 import dpkt
 
 # import pandas as pd
@@ -25,22 +27,26 @@ def extract_features_from_pcap_via_dpkt(pcap_file):
             continue
         ip_packet = eth.data
         # print(ip_packet.data)
-        print("packet No.", count, ":")
-        print("-- src: ", get_packet_src_ip(ip_packet), ":", get_packet_src_port(ip_packet))
-        print("-- dst: ", get_packet_dst_ip(ip_packet), ":", get_packet_dst_port(ip_packet))
-        out.append(
-            (ts,
-             get_packet_src_ip(ip_packet),
-             get_packet_src_port(ip_packet),
-             get_packet_dst_ip(ip_packet),
-             get_packet_dst_port(ip_packet),
-             # todo: packet size
-             # todo: List Format? Dict format?
-             )
-        )
-
+        try:
+            print("packet No.", count, ":")
+            print("-- src: ", get_packet_src_ip(ip_packet), ":", get_packet_src_port(ip_packet))
+            print("-- dst: ", get_packet_dst_ip(ip_packet), ":", get_packet_dst_port(ip_packet))
+            out.append(
+                (ts,
+                 get_packet_src_ip(ip_packet),
+                 get_packet_src_port(ip_packet),
+                 get_packet_dst_ip(ip_packet),
+                 get_packet_dst_port(ip_packet),
+                 # todo: packet size
+                 # todo: List Format? Dict format?
+                 )
+            )
+        except:
+            continue
     return out
 
 
 if __name__ == '__main__':
-    extract_features_from_pcap_via_dpkt("TestFiles/test.pcap")
+    start_time = time.time()
+    extract_features_from_pcap_via_dpkt("TestFiles/test2.pcap")
+    print("time elapsed: {:.2f}s".format(time.time() - start_time))
