@@ -1,5 +1,6 @@
 class PacketData:
     invalid = False
+    ts = None
     src_ip_addr = None
     src_port = None
     dst_ip_addr = None
@@ -7,7 +8,8 @@ class PacketData:
 
     # todo: add other attributes like packet size
 
-    def __init__(self, src_ip_addr, src_port, dst_ip_addr, dst_port):
+    def __init__(self, ts, src_ip_addr, src_port, dst_ip_addr, dst_port):
+        self.ts = ts
         self.src_ip_addr = src_ip_addr
         self.src_port = src_port
         self.dst_ip_addr = dst_ip_addr
@@ -16,7 +18,11 @@ class PacketData:
         self.invalid = self.validate_packet_data()
 
     def validate_packet_data(self):
-        if self.src_ip_addr is None or self.src_port is None or self.dst_ip_addr is None or self.dst_port is None:
+        if self.ts is None or \
+                self.src_ip_addr is None \
+                or self.src_port is None \
+                or self.dst_ip_addr is None \
+                or self.dst_port is None:
             return True
         return False
 
