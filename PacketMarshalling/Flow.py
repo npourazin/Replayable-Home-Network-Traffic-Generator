@@ -14,10 +14,10 @@ class Flow:
         self.pacs = pacs
 
     def get_first_flow_packet(self):
-        pass
+        return self.first_flow_packet
 
     def get_last_flow_packet(self):
-        pass
+        return self.last_flow_packet
 
     def calc_duration(self):
         new_duration = self.last_flow_packet.ts - self.first_flow_packet.ts

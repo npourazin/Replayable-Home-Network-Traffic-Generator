@@ -26,6 +26,12 @@ class PacketData:
             return True
         return False
 
-    def show_packet_data(self):
-        # todo: make some pretty printing format
-        pass
+    # def show_packet_data(self):
+    #     pass
+
+    def __str__(self):
+        return "Packet:\n" + \
+               "  ts: " + str(self.ts) + "\n" + \
+               "  src: " + str(self.src_ip_addr) + ":" + str(self.src_port) + "\n" + \
+               "  dst: " + str(self.dst_ip_addr) + ":" + str(self.dst_port) + "\n"
+        # todo update with new parameters like packet size
