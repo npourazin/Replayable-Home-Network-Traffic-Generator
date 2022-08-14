@@ -1,4 +1,4 @@
-from FlowSegregation.PacketData import PacketData
+from PacketMarshalling.PacketData import PacketData
 
 
 class Flow:

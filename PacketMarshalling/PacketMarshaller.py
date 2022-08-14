@@ -1,13 +1,13 @@
-from FlowSegregation.Flow import Flow
+from PacketMarshalling.Flow import Flow
 
 
-class FlowSegregator:
+class PacketMarshaller:
     flows = []
 
     def __init__(self, pacs):
-        self.flows = self.segregate_flows(pacs)
+        self.flows = self.marshall_packets(pacs)
 
-    def segregate_flows(self, pacs):
+    def marshall_packets(self, pacs):
         # todo: implement basic segregation
         if self.flows in []:
             # todo: well the whole thing is useless annnnndddd
