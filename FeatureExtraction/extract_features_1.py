@@ -9,7 +9,7 @@ import dpkt
 from FeatureExtraction.connectivity_features import *
 
 
-def extract_features_from_pcap_via_dpkt(pcap_file):
+def extract_features_from_pcap_via_dpkt(pcap_file, print_flag=0):
     f = open(pcap_file, 'rb')
     pcap = dpkt.pcap.Reader(f)
     # Using SCAPY for Zigbee and blutooth ##
@@ -17,7 +17,9 @@ def extract_features_from_pcap_via_dpkt(pcap_file):
     count = 0
     out = []
     for ts, buf in pcap:
-        print("-----------------------------------------------------------------------")
+        if print_flag:
+            print("-----------------------------------------------------------------------")
+
         try:
             eth = dpkt.ethernet.Ethernet(buf)
             count = count + 1
@@ -28,9 +30,10 @@ def extract_features_from_pcap_via_dpkt(pcap_file):
         ip_packet = eth.data
         # print(ip_packet.data)
         try:
-            print("packet No.", count, ":")
-            print("-- src: ", get_packet_src_ip(ip_packet), ":", get_packet_src_port(ip_packet))
-            print("-- dst: ", get_packet_dst_ip(ip_packet), ":", get_packet_dst_port(ip_packet))
+            if print_flag:
+                print("packet No.", count, ":")
+                print("-- src: ", get_packet_src_ip(ip_packet), ":", get_packet_src_port(ip_packet))
+                print("-- dst: ", get_packet_dst_ip(ip_packet), ":", get_packet_dst_port(ip_packet))
             out.append(
                 (ts,
                  get_packet_src_ip(ip_packet),
