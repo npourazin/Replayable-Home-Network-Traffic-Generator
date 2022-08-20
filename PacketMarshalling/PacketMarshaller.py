@@ -1,4 +1,6 @@
 import random
+from collections import Counter
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -18,7 +20,7 @@ class PacketMarshaller:
     def marshall_packets(self):
 
         for pac in self.packets:
-            f_id = str(hash((pac.src_ip_addr, pac.src_port, pac.dst_ip_addr, pac.dst_port)))
+            f_id = str(hash(frozenset(Counter([pac.src_ip_addr, pac.src_port, pac.dst_ip_addr, pac.dst_port]).items())))
             if f_id in self.flows:
                 self.flows[f_id].add_new_pac(pac)
 
