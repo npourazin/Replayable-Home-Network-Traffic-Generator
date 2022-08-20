@@ -1,9 +1,10 @@
 from PacketMarshalling.PacketData import PacketData
+from typing import List
 
 
 class Flow:
-    # todo assert type as a list of PacketData
-    pacs = []
+    # asserts type as a list of PacketData
+    pacs: List[PacketData] = []
 
     # Flow attributes
     duration = 0
