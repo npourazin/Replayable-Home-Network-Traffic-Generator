@@ -1,3 +1,6 @@
+import datetime
+
+
 class PacketData:
     invalid = False
     ts = None
@@ -30,8 +33,9 @@ class PacketData:
     #     pass
 
     def __str__(self):
+        # "  ts: " + str(self.ts) + "\n" + \
         return "Packet:\n" + \
-               "  ts: " + str(self.ts) + "\n" + \
+               "  ts:  " + str(datetime.datetime.utcfromtimestamp(self.ts)) + "\n" +\
                "  src: " + str(self.src_ip_addr) + ":" + str(self.src_port) + "\n" + \
                "  dst: " + str(self.dst_ip_addr) + ":" + str(self.dst_port) + "\n"
         # todo update with new parameters like packet size
