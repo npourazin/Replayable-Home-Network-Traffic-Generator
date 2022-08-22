@@ -34,17 +34,29 @@ def extract_features_from_pcap_via_dpkt(pcap_file, print_flag=0):
                 print("packet No.", count, ":")
                 print("-- src: ", get_packet_src_ip(ip_packet), ":", get_packet_src_port(ip_packet))
                 print("-- dst: ", get_packet_dst_ip(ip_packet), ":", get_packet_dst_port(ip_packet))
+
+            packet_size = len(ip_packet)
+
+            tcp_packet = ip_packet.data
+            ip_payload_size = len(tcp_packet)
+            tcp_payload_size = len(tcp_packet.data)
+
             out.append(
                 (ts,
                  get_packet_src_ip(ip_packet),
                  get_packet_src_port(ip_packet),
                  get_packet_dst_ip(ip_packet),
                  get_packet_dst_port(ip_packet),
-                 # todo: packet size
+                 packet_size,
+                 ip_payload_size,
+                 tcp_payload_size,
+
+
                  # todo: List Format? Dict format?
                  )
             )
         except:
+            print("Non-TCP Packet types are not supported.")
             continue
     return out
 

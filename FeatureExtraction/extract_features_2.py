@@ -121,7 +121,11 @@ def extract_features_from_pcap_via_scapy_iterator(pcap_file, buff_size=1):
                  pac.payload.sport,
                  pac.payload.dst,
                  pac.payload.dport,
-                 # todo: packet size
+
+                 len(pac.payload),
+                 len(pac.payload.payload),
+                 len(pac.payload.payload.payload),
+
                  # todo: List Format? Dict format?
                  )
             )
@@ -130,7 +134,7 @@ def extract_features_from_pcap_via_scapy_iterator(pcap_file, buff_size=1):
 
 
 if __name__ == '__main__':
-    pcap_file = "FeatureExtraction/TestFiles/test.pcap"
+    pcap_file = "TestFiles/test.pcap"
     scapy_pcap_reader = PcapReader(pcap_file)
     # pacs = get_next_n_packets(count=10)
     pacs = get_next_n_packets(count=70)
@@ -144,4 +148,7 @@ if __name__ == '__main__':
 
     print("\n\n\n\n\n\n")
     print("time elapsed: {:.2f}s".format(time.time() - start_time))
+
+    # pacs = extract_features_from_pcap_via_scapy_iterator(pcap_file, 100)
+    # print(pacs)
 # print(pac.layers()[1])

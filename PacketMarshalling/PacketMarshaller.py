@@ -1,5 +1,6 @@
 import random
 from collections import Counter
+from typing import List
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,7 +12,7 @@ from PacketMarshalling.PacketData import PacketData
 
 class PacketMarshaller:
     flows = {}
-    packets = []
+    packets: List[PacketData] = []
 
     def __init__(self, filename):
         self.create_packets(filename)
@@ -20,6 +21,9 @@ class PacketMarshaller:
     def marshall_packets(self):
 
         for pac in self.packets:
+            if not pac.validate_packet_data():
+                continue
+
             f_id = str(hash(frozenset(Counter([pac.src_ip_addr, pac.src_port, pac.dst_ip_addr, pac.dst_port]).items())))
             if f_id in self.flows:
                 self.flows[f_id].add_new_pac(pac)
@@ -80,6 +84,8 @@ if __name__ == '__main__':
     print("number of packets:", len(pm.packets))
     print("number of flows:", len(pm.flows))
     print("duration average: ", (dur_sum / len(pm.flows)))
+    print("std duration: ", np.std(dur_arr))
+
     print(dur_arr)
 
     dur_arr = sorted(dur_arr)
