@@ -8,6 +8,7 @@ import numpy as np
 from FeatureExtraction.extract_features_1 import extract_features_from_pcap_via_dpkt
 from PacketMarshalling.Flow import Flow
 from PacketMarshalling.PacketData import PacketData
+import pickle
 
 
 class PacketMarshaller:
@@ -57,7 +58,8 @@ class PacketMarshaller:
 
 if __name__ == '__main__':
     # PacketMarshaller("TestFiles/test.pcap")
-    pm = PacketMarshaller("../FeatureExtraction/TestFiles/test3.pcap")
+    pcap_file = "../FeatureExtraction/TestFiles/test5.pcap"
+    pm = PacketMarshaller(pcap_file)
     # print(pm.flows)
     # print(len(pm.flows))
     # k = random.choice(list(pm.flows.keys()))
@@ -87,6 +89,13 @@ if __name__ == '__main__':
     print("std duration: ", np.std(dur_arr))
 
     print(dur_arr)
+
+    filehandler = open("FlowRecords/test5-1.obj", 'wb')
+    pickle.dump(pm.flows, filehandler)
+    # filehandler = open("FlowRecords/test5-1.obj", 'rb')
+    # pppmmm = pickle.load(filehandler)
+    # # print(pppmmm.flows)
+    # print(pppmmm)
 
     dur_arr = sorted(dur_arr)
     plt.plot(dur_arr)
