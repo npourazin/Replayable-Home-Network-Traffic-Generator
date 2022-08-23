@@ -13,7 +13,9 @@ import pickle
 
 class PacketMarshaller:
     flows = {}
+    recorded_flow_list = []
     packets: List[PacketData] = []
+    expiration_black_list = set()
 
     def __init__(self, filename):
         self.create_packets(filename)
@@ -21,13 +23,25 @@ class PacketMarshaller:
 
     def marshall_packets(self):
 
+        loop_counter = 0
         for pac in self.packets:
+            loop_counter += 1
             if not pac.validate_packet_data():
                 continue
 
+            if loop_counter % 1000 == 0:
+                self.check_all_flows_life()
+
             f_id = str(hash(frozenset(Counter([pac.src_ip_addr, pac.src_port, pac.dst_ip_addr, pac.dst_port]).items())))
             if f_id in self.flows:
-                self.flows[f_id].add_new_pac(pac)
+                if f_id in self.expiration_black_list:
+                    # this flow was previously expired and needs to be renewed
+                    self.expiration_black_list.remove(f_id)
+                    self.recorded_flow_list.append(self.flows[f_id])
+                    self.flows[f_id] = Flow(pac)
+                else:
+                    # this flow has not expired and the packet can be added to it
+                    self.flows[f_id].add_new_pac(pac)
 
             else:
                 new_flow = Flow(pac)
@@ -35,18 +49,9 @@ class PacketMarshaller:
                 # print(new_flow)
                 # print(f_id)
 
-        # # todo: implement basic segregation
-        # if self.flows in []:
-        #     # todo: well the whole thing is useless annnnndddd
-        #     #  it isn't even what it should be sooo
-        #     flows = [Flow(pacs)]
-        #     return flows
-        # else:
-        #     flows = [self.flows, Flow(pacs)]
-        #     return flows
-        #     # raise Exception("FlowAlreadyFull")
-
-        # todo: check check_flow_duration for every flow in a loop
+        # record leftover flows
+        for k in self.flows:
+            self.recorded_flow_list.append(self.flows[k])
 
     def create_packets(self, filename):
         data = extract_features_from_pcap_via_dpkt(filename)
@@ -54,6 +59,11 @@ class PacketMarshaller:
             self.packets.append(PacketData(*d))
 
         print(len(self.packets))
+
+    def check_all_flows_life(self):
+        for k in self.flows:
+            if self.flows[k].check_flow_expiration():
+                self.expiration_black_list.add(k)
 
 
 if __name__ == '__main__':
@@ -90,8 +100,8 @@ if __name__ == '__main__':
 
     print(dur_arr)
 
-    filehandler = open("FlowRecords/test5-1.obj", 'wb')
-    pickle.dump(pm.flows, filehandler)
+    filehandler = open("FlowRecords/test5-2.obj", 'wb')
+    pickle.dump(pm.recorded_flow_list, filehandler)
     # filehandler = open("FlowRecords/test5-1.obj", 'rb')
     # pppmmm = pickle.load(filehandler)
     # # print(pppmmm.flows)

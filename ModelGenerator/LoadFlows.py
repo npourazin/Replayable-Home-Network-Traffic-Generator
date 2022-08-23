@@ -6,7 +6,7 @@ from PacketMarshalling import Flow
 
 class LoadFlows:
     # flow_list: Dict[Flow] = {}
-    flow_list = {}
+    flow_list = []
 
     # todo create a model using the detected flows
 
@@ -29,15 +29,17 @@ class LoadFlows:
 
 
 if __name__ == '__main__':
-    lf = LoadFlows("../PacketMarshalling/FlowRecords/test5-1.obj")
+    lf = LoadFlows("../PacketMarshalling/FlowRecords/test5-2.obj")
     pac = None
-    for f in lf.flow_list:
-        if lf.flow_list[f].first_flow_packet.src_ip_addr != lf.flow_list[f].last_flow_packet.src_ip_addr:
-            print(lf.flow_list[f])
-            print(lf.flow_list[f].first_flow_packet.src_ip_addr)
-            print(lf.flow_list[f].last_flow_packet.src_ip_addr)
-
-            # todo check why there are none of this
+    print(lf.flow_list)
+    print(lf.flow_list[0])
+    # for f in lf.flow_list:
+    #     if lf.flow_list[f].first_flow_packet.src_ip_addr != lf.flow_list[f].last_flow_packet.src_ip_addr:
+    #         print(lf.flow_list[f])
+    #         print(lf.flow_list[f].first_flow_packet.src_ip_addr)
+    #         print(lf.flow_list[f].last_flow_packet.src_ip_addr)
+    #
+    #         # todo check why there are none of this
     # print(str(hash((1, 2))))
     # print(str(hash((2, 1))))
     # from collections import Counter

@@ -17,7 +17,7 @@ class Flow:
     dst_port = None
 
     # todo: set appropriate value
-    max_flow_duration = 2
+    max_flow_duration = 60
 
     # def __init__(self, pacs):
     #     for pac in pacs:
@@ -36,8 +36,6 @@ class Flow:
 
         self.add_new_pac(pac)
 
-
-
     def get_first_flow_packet(self):
         return self.first_flow_packet
 
@@ -47,10 +45,6 @@ class Flow:
     def calc_duration(self):
         new_duration = self.last_flow_packet.ts - self.first_flow_packet.ts
         self.duration = new_duration
-
-    def create_record(self):
-        # todo: save the flow as a record on disk
-        pass
 
     def update_with_new_pac(self, pac):
 
@@ -129,12 +123,12 @@ class Flow:
 
         return True
 
-    def check_flow_duration(self):
+    def check_flow_expiration(self):
         if self.duration >= self.max_flow_duration:
-            print("limit Exceeded. Saving Flow.")
-            self.create_record()
-            return False
-        return True
+            return True
+        # print("limit Exceeded. Saving Flow.")
+        # self.create_record()
+        return False
 
     def __str__(self):
         return 'number of packets:' + str(len(self.pacs)) + '\nduration: ' + str(self.duration) + '\nfirst:' + str(
