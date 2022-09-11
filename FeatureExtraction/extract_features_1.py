@@ -1,3 +1,4 @@
+import datetime
 import time
 
 import dpkt
@@ -24,7 +25,8 @@ def extract_features_from_pcap_via_dpkt(pcap_file, print_flag=0):
             eth = dpkt.ethernet.Ethernet(buf)
             count = count + 1
         except:
-            print("Non-IP Packet types are not supported.")
+            # commented to improve performance
+            # print("Non-IP Packet types are not supported.")
             count = count + 1
             continue
         ip_packet = eth.data
@@ -51,17 +53,21 @@ def extract_features_from_pcap_via_dpkt(pcap_file, print_flag=0):
                  ip_payload_size,
                  tcp_payload_size,
 
-
                  # todo: List Format? Dict format?
                  )
             )
         except:
-            print("Non-TCP Packet types are not supported.")
+            # commented to improve performance
+            # print("Non-TCP Packet types are not supported.")
             continue
     return out
 
 
 if __name__ == '__main__':
     start_time = time.time()
-    extract_features_from_pcap_via_dpkt("TestFiles/test2.pcap")
+    out = extract_features_from_pcap_via_dpkt("TestFiles/test5.pcap")
+    ts0, *rest = out[0]
+    ts1, *rest = out[len(out)-1]
+    print(str(datetime.datetime.utcfromtimestamp(ts0)))
+    print(str(datetime.datetime.utcfromtimestamp(ts1)))
     print("time elapsed: {:.2f}s".format(time.time() - start_time))

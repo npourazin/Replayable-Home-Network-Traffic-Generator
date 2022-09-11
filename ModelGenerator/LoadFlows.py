@@ -18,8 +18,8 @@ class LoadFlows:
         filehandler = open(filename, 'rb')
         # pm: PacketMarshaller = None
         flows = pickle.load(filehandler)
-        print(flows)
-        print(type(flows))
+        # print(flows)
+        # print(type(flows))
         # for flow in flows:
         #     print(flows[flow])
         return flows
