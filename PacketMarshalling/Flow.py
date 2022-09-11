@@ -130,6 +130,10 @@ class Flow:
         # self.create_record()
         return False
 
+    def calc_flow_size(self):
+        # todo check the logic!!
+        pass
+
     def __str__(self):
         return 'number of packets:' + str(len(self.pacs)) + '\nduration: ' + str(self.duration) + '\nfirst:' + str(
             self.first_flow_packet) + 'last:' + str(

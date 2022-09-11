@@ -7,3 +7,4 @@ class PacketListAttribute(ListAttribute):
 
     def __init__(self, flow):
         self.flow = flow
+        super().__init__()
