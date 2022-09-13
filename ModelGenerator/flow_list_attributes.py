@@ -14,13 +14,13 @@ class FlowListAttribute(ListAttribute):
             lf = LoadFlows(flow_obj_addr)
             self.flow_list = lf.flow_list
 
-        item_size_list = self.get_item_size_list()
-        item_intervals_list = self.get_item_intervals_list()
+        item_size_list = self.get_flow_size_list()
+        item_intervals_list = self.get_flow_intervals_list()
 
         super().__init__(number_of_items=len(self.flow_list), item_size_list=item_size_list,
                          item_intervals_list=item_intervals_list)
 
-    def get_item_size_list(self):
+    def get_flow_size_list(self):
         sl = []
         for flow in self.flow_list:
             continue
@@ -28,7 +28,7 @@ class FlowListAttribute(ListAttribute):
             # sl.append(flow.size())
         return sl
 
-    def get_item_intervals_list(self):
+    def get_flow_intervals_list(self):
         inter_arr_ts = []
 
         for f in self.flow_list:
@@ -43,7 +43,7 @@ class FlowListAttribute(ListAttribute):
         return inter_arr
 
     def inter_arrival_histogram(self):
-        inter_arr = self.get_item_intervals_list()
+        inter_arr = self.get_flow_intervals_list()
         print(inter_arr)
         print(print())
         print(len(inter_arr))
