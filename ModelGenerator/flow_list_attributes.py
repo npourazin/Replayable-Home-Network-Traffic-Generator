@@ -23,9 +23,9 @@ class FlowListAttribute(ListAttribute):
     def get_flow_size_list(self):
         sl = []
         for flow in self.flow_list:
-            continue
             # todo flow got no size func , fill it
-            # sl.append(flow.size())
+            #todo TEMPRORYY FIX THISSSSS
+            sl.append(len(flow.pacs))
         return sl
 
     def get_flow_intervals_list(self):

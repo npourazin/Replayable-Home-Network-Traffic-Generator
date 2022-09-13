@@ -48,7 +48,7 @@ class ListAttribute:
         if distr == 'Pareto':
             new_list = trainer.pareto(num)
 
-        if distr == 'Gamma':
+        elif distr == 'Gamma':
             new_list = trainer.gamma(num)
 
         else:
