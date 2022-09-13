@@ -4,6 +4,7 @@ from PacketMarshalling import Flow
 
 class PacketListAttribute(ListAttribute):
     flow: Flow = None
+    pac_sizes_complete = []
 
     def __init__(self, flow):
         self.flow = flow
@@ -13,8 +14,9 @@ class PacketListAttribute(ListAttribute):
             return
 
         item_intervals_list, item_size_list = self.get_packet_intervals_and_sizes()
-        super().__init__(number_of_items=len(self.flow.pacs), item_size_list=item_size_list,
-                         item_intervals_list=item_intervals_list)
+        # super().__init__(number_of_items=len(self.flow.pacs), item_size_list=item_size_list,
+        #                  item_intervals_list=item_intervals_list)
+        super().__init__(item_size_list=item_size_list, item_intervals_list=item_intervals_list)
 
     def get_packet_intervals_and_sizes(self):
         pac_intervals = []
@@ -25,7 +27,8 @@ class PacketListAttribute(ListAttribute):
 
         for i in range(len(self.flow.pacs)):
             pac = self.flow.pacs[i]
-            pac_sizes.append((i, pac.packet_size, pac.ip_payload_size, pac.tcp_payload_size))
+            self.pac_sizes_complete.append((i, pac.packet_size, pac.ip_payload_size, pac.tcp_payload_size))
+            pac_sizes.append(pac.packet_size)
 
             if i == 0:
                 continue
@@ -33,6 +36,7 @@ class PacketListAttribute(ListAttribute):
             prev_pac = self.flow.pacs[i - 1]
 
             dist = pac.ts - prev_pac.ts
-            pac_intervals.append(((i - 1, i), dist))
+            # pac_intervals.append(((i - 1, i), dist))
+            pac_intervals.append(dist)
 
         return pac_intervals, pac_sizes

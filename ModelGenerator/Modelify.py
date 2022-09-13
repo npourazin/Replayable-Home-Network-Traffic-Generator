@@ -25,8 +25,9 @@ class Modelify:
         print("*******")
         print(fla.item_size_list)
         print(fla.item_intervals_list)
-        num, sizes, inters = fla.train_list('Pareto', 'Gamma')
-        print(num, sizes, inters)
+        # num, sizes, inters = fla.train_list('Pareto', 'Gamma')
+        size, inter = fla.get_new_size('Pareto'), fla.get_new_interval('Gamma')
+        print(size, inter)
         fla.inter_arrival_histogram()
 
         pla = PacketListAttribute(flow=loader.get_a_random_flow())
