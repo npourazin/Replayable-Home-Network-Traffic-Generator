@@ -31,6 +31,12 @@ class ListAttribute:
         # todo use the specified distribution to get a random number
         rand_num = int(random.normal(loc=self.number_of_items, scale=3.0, size=None))
         assert isinstance(rand_num, int), 'Random number - wrong type!'
+
+        if rand_num < 0:
+            rand_num *= -1
+
+        # todo know if rand_num == 0 the initial size is to be established!
+
         return rand_num
 
     @staticmethod

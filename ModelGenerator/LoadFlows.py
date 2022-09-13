@@ -1,28 +1,29 @@
 import pickle
+import random
 from typing import Dict
 
 from PacketMarshalling import Flow
 
 
 class LoadFlows:
-    # flow_list: Dict[Flow] = {}
-    flow_list = []
-
-    # todo create a model using the detected flows
+    flow_list: [Flow] = []
 
     def __init__(self, filename):
         self.flow_list = self.load_flows(filename)
 
     def load_flows(self, filename):
         # todo: open the file with the recorded flows and load the flows in a list (:flow_list)
-        filehandler = open(filename, 'rb')
-        # pm: PacketMarshaller = None
-        flows = pickle.load(filehandler)
-        # print(flows)
-        # print(type(flows))
-        # for flow in flows:
-        #     print(flows[flow])
+        try:
+            file_handler = open(filename, 'rb')
+            flows = pickle.load(file_handler)
+        except:
+            print("Failed to reload. returning previous value for flow_list")
+            return self.flow_list
+
         return flows
+
+    def get_a_random_flow(self):
+        return random.choice(self.flow_list)
 
     def get_flows(self):
         return self.flow_list
@@ -30,14 +31,15 @@ class LoadFlows:
 
 if __name__ == '__main__':
     lf = LoadFlows("../PacketMarshalling/FlowRecords/test5-2.obj")
-    pac = None
+    pac = lf.flow_list[0]
     print(lf.flow_list)
     print(lf.flow_list[0])
+
     # for f in lf.flow_list:
-    #     if lf.flow_list[f].first_flow_packet.src_ip_addr != lf.flow_list[f].last_flow_packet.src_ip_addr:
-    #         print(lf.flow_list[f])
-    #         print(lf.flow_list[f].first_flow_packet.src_ip_addr)
-    #         print(lf.flow_list[f].last_flow_packet.src_ip_addr)
+    #     if f.first_flow_packet.src_ip_addr != f.last_flow_packet.src_ip_addr:
+    #         print(f)
+    #         print(f.first_flow_packet.src_ip_addr)
+    #         print(f.last_flow_packet.src_ip_addr)
     #
     #         # todo check why there are none of this
     # print(str(hash((1, 2))))
