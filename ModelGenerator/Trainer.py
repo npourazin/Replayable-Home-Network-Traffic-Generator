@@ -18,7 +18,8 @@ class Trainer:
         self.variance_of_distribution = numpy.var(data)
 
     def gamma(self, sample_number=0):
-        sample_number = len(self.data)
+        if sample_number == 0:
+            sample_number = len(self.data)
 
         def gamma_random_sample(mean, variance):
             """Yields a list of random numbers following a gamma distribution defined by mean and variance"""
@@ -35,8 +36,11 @@ class Trainer:
         print("Original data: ", sorted(self.data))
         print("Random sample: ", sorted(grs))
 
+        return grs
+
     def pareto(self, sample_number=0):
-        sample_number = len(self.data)
+        if sample_number == 0:
+            sample_number = len(self.data)
         p_a = 2
         p_size = (2, 3)  # ????
         fshape, floc, fscale = stats.pareto.fit(self.data)
@@ -56,6 +60,8 @@ class Trainer:
         print("Pareto:")
         print("Original data: ", sorted(self.data))
         print("Random sample: ", sorted(prs))
+
+        return prs
 
         # todo:
         #       1- check for shape, loc and scale, maybe on a video

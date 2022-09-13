@@ -1,3 +1,8 @@
+from numpy import random
+
+from ModelGenerator.Trainer import Trainer
+
+
 class ListAttribute:
     number_of_items: int = 0
     item_size_list: [int] = []
@@ -12,5 +17,35 @@ class ListAttribute:
             self.item_size_list = []
             self.item_intervals_list = []
 
-    def train_list(self):
-        pass
+    def train_list(self, size_distr, interval_distr):
+        random_number = self.get_random_the_number_of_items()
+
+        new_sizes = self.get_random_list(self.item_size_list, size_distr, random_number)
+        new_intervals = self.get_random_list(self.item_intervals_list, interval_distr, (random_number - 1))
+
+        return random_number, new_sizes, new_intervals
+
+    def get_random_the_number_of_items(self):
+        rand_num = 0
+
+        # todo use the specified distribution to get a random number
+        rand_num = int(random.normal(loc=self.number_of_items, scale=3.0, size=None))
+        assert isinstance(rand_num, int), 'Random number - wrong type!'
+        return rand_num
+
+    @staticmethod
+    def get_random_list(data_list, distr, num):
+        new_list = []
+        trainer = Trainer(data_list)
+
+        # todo use the specified distribution to get new items
+        if distr == 'Pareto':
+            new_list = trainer.pareto(num)
+
+        if distr == 'Gamma':
+            new_list = trainer.gamma(num)
+
+        else:
+            print("unsupported distribution")
+
+        return new_list
