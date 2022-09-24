@@ -30,12 +30,12 @@ class Modelify:
 
         sizes, inters = fla.train_list('Pareto', 'Gamma', len(fla.item_size_list))
         # sizes, inters = fla.train_list('Gamma', 'Pareto', len(fla.item_size_list))
-        fla.inter_arrival_histogram()
-        fla.dist_histogram(inters)
-        fla.dist_histogram(sizes)
+        # fla.inter_arrival_histogram()
+        # fla.dist_histogram(inters)
+        # fla.dist_histogram(sizes)
 
         pla = PacketListAttribute(flow=loader.get_a_random_flow())
-
+        return fla, pla
 
 if __name__ == '__main__':
     addr = "../PacketMarshalling/FlowRecords/test5-2.obj"
