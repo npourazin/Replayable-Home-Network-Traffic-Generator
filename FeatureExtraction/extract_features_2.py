@@ -2,6 +2,7 @@
 # import json
 from scapy.all import *
 # from connectivity_features import get_packet_src_ip, get_packet_dst_ip, get_packet_dst_port, get_packet_src_port
+from scapy.layers.inet import TCP
 from scapy.utils import PcapReader
 
 scapy_pcap_reader = None
@@ -110,6 +111,11 @@ def extract_features_from_pcap_via_scapy_iterator(pcap_file, buff_size=1):
     out = []
 
     for pac in pacs:
+        # pac.show()
+        if not pac.payload.haslayer(TCP):
+            continue
+            # print("***********************************************************************")
+            # print(pac.layers())
         if hasattr(pac.payload, 'src') \
                 and hasattr(pac.payload, 'sport') \
                 and hasattr(pac.payload, 'dst') \
@@ -137,14 +143,12 @@ if __name__ == '__main__':
     pcap_file = "TestFiles/test.pcap"
     scapy_pcap_reader = PcapReader(pcap_file)
     # pacs = get_next_n_packets(count=10)
-    pacs = get_next_n_packets(count=70)
+    pacs = extract_features_from_pcap_via_scapy_iterator(pcap_file, buff_size=70)
     print("time elapsed: {:.2f}s".format(time.time() - start_time))
-    # print("Packet list:", pacs, "\n\n")
-    pac0 = pacs[0]
-    print("First packet of the list:")
-    pac0.show()
+
     print("\n\n\n\n\n\n")
-    get_ip_and_port_of_packet_src_and_dst(pacs)
+    # pass real packets
+    # get_ip_and_port_of_packet_src_and_dst(pacs)
 
     print("\n\n\n\n\n\n")
     print("time elapsed: {:.2f}s".format(time.time() - start_time))

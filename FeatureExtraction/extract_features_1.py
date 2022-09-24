@@ -29,9 +29,27 @@ def extract_features_from_pcap_via_dpkt(pcap_file, print_flag=0):
             # print("Non-IP Packet types are not supported.")
             count = count + 1
             continue
+
         ip_packet = eth.data
+
+        if hasattr(ip_packet, 'p'):
+            if ip_packet.p != 6:
+                # print(ip_packet.p)
+                # non-tcp
+                count += 1
+                continue
+
+        else:
+            # non-ip
+            count += 1
+            continue
+        # print(ip_packet.get)
+        # print(type(ip_packet))
+        # print(ip_packet.get_proto(ip_packet).__name__)
         # print(ip_packet.data)
         try:
+            # print(ip_packet.get_proto(ip_packet).__name__)
+            # print(ip_packet.p)
             if print_flag:
                 print("packet No.", count, ":")
                 print("-- src: ", get_packet_src_ip(ip_packet), ":", get_packet_src_port(ip_packet))
@@ -56,7 +74,8 @@ def extract_features_from_pcap_via_dpkt(pcap_file, print_flag=0):
                  # todo: List Format? Dict format?
                  )
             )
-        except:
+        except Exception as e:
+            print(e)
             # commented to improve performance
             # print("Non-TCP Packet types are not supported.")
             continue
