@@ -16,8 +16,7 @@ class Modelify:
     #     choose a random flow
     #     train the random flow
 
-    def create_model(self):
-        addr = "../PacketMarshalling/FlowRecords/test5-2.obj"
+    def create_model(self, addr):
         loader = LoadFlows(addr)
         self.flow_list = loader.flow_list
 
@@ -28,11 +27,17 @@ class Modelify:
         # num, sizes, inters = fla.train_list('Pareto', 'Gamma')
         size, inter = fla.get_new_size('Pareto'), fla.get_new_interval('Gamma')
         print(size, inter)
+
+        sizes, inters = fla.train_list('Pareto', 'Gamma', len(fla.item_size_list))
+        # sizes, inters = fla.train_list('Gamma', 'Pareto', len(fla.item_size_list))
         fla.inter_arrival_histogram()
+        fla.dist_histogram(inters)
+        fla.dist_histogram(sizes)
 
         pla = PacketListAttribute(flow=loader.get_a_random_flow())
 
 
 if __name__ == '__main__':
+    addr = "../PacketMarshalling/FlowRecords/test5-2.obj"
     m = Modelify()
-    m.create_model()
+    m.create_model(addr=addr)

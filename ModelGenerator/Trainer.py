@@ -33,8 +33,8 @@ class Trainer:
                gamma_random_sample(self.mean_of_distribution, self.variance_of_distribution)]
 
         print("Gamma:")
-        print("Original data: ", sorted(self.data))
-        print("Random sample: ", sorted(grs))
+        print("Original data: ", self.data)
+        print("Random sample: ", grs)
 
         return grs
 
@@ -67,8 +67,11 @@ class Trainer:
                pareto_random_sample(alpha)]
 
         print("Pareto:")
-        print("Original data: ", sorted(self.data))
-        print("Random sample: ", sorted(prs))
+        print("Original data: ", self.data)
+        print("Random sample: ", prs)
+
+        # print("Original data: ", sorted(self.data))
+        # print("Random sample: ", sorted(prs))
 
         return prs
 

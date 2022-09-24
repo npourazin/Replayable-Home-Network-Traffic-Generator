@@ -45,7 +45,7 @@ class FlowListAttribute(ListAttribute):
     def inter_arrival_histogram(self):
         inter_arr = self.get_flow_intervals_list()
         for inter in range(len(inter_arr)):
-            inter_arr[inter] *= 60  # put in minutes
+            inter_arr[inter] *= 50
         print(inter_arr)
         print(print())
         print(len(inter_arr))
@@ -56,6 +56,21 @@ class FlowListAttribute(ListAttribute):
         print(range(-1 * num, m, num)[1:])
         print(range(-1 * num, m, num))
         plt.hist(inter_arr, bins=range(0, m, num), density=True)
+        plt.show()
+
+    def dist_histogram(self, arr):
+        for inter in range(len(arr)):
+            arr[inter] *= 10
+        print(arr)
+        print(print())
+        print(len(arr))
+        m = int(max(arr))
+        # num = 1000*3
+        # num = 6 * 1000
+        num = 10
+        print(range(-1 * num, m, num)[1:])
+        print(range(-1 * num, m, num))
+        plt.hist(arr, bins=range(0, m, num), density=True)
         plt.show()
 
 

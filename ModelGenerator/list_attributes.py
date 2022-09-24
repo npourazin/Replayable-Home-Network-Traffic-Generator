@@ -22,12 +22,15 @@ class ListAttribute:
     def train_list(self, size_distr, interval_distr, number_of_elements):
         # random_number = self.get_random_the_number_of_items()
         new_sizes = self.get_random_list(self.item_size_list, size_distr, number_of_elements)
+        for n in new_sizes:
+            n = int(n)
+
         new_intervals = self.get_random_list(self.item_intervals_list, interval_distr, (number_of_elements - 1))
 
         return new_sizes, new_intervals
 
     def get_new_size(self, distr):
-        return self.get_a_single_random_element(self.item_size_list, distr)
+        return int(self.get_a_single_random_element(self.item_size_list, distr))
 
     def get_new_interval(self, distr):
         return self.get_a_single_random_element(self.item_intervals_list, distr)
