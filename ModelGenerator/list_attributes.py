@@ -70,7 +70,9 @@ class ListAttribute:
     def get_a_single_random_element(data_list, distr):
         new_item = None
         trainer = Trainer(data_list)
-
+        print("     Getting Random value (on list attributes)")
+        if not data_list:
+            return 0
         # use the specified distribution to get new items
         if distr == 'Pareto':
             new_item = trainer.pareto_single_item()

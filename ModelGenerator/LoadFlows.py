@@ -7,9 +7,11 @@ from PacketMarshalling import Flow
 
 class LoadFlows:
     flow_list: [Flow] = []
+    file_addr = ""
 
     def __init__(self, filename):
         self.flow_list = self.load_flows(filename)
+        self.file_addr = filename
 
     def load_flows(self, filename):
         # todo: open the file with the recorded flows and load the flows in a list (:flow_list)

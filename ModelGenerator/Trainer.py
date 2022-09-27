@@ -32,9 +32,9 @@ class Trainer:
         grs = [int(i) for i in
                gamma_random_sample(self.mean_of_distribution, self.variance_of_distribution)]
 
-        print("Gamma:")
-        print("Original data: ", self.data)
-        print("Random sample: ", grs)
+        # print("Gamma:")
+        # print("Original data: ", self.data)
+        # print("Random sample: ", grs)
 
         return grs
 
@@ -42,9 +42,13 @@ class Trainer:
         """:returns a random number following a gamma distribution defined by mean and variance"""
         self.mean_of_distribution = numpy.mean(self.data)
         self.variance_of_distribution = numpy.var(self.data)
+        if self.mean_of_distribution == 0 or self.variance_of_distribution == 0:
+            g_alpha = 1
+            g_beta = 1
+        else:
+            g_alpha = self.mean_of_distribution * self.mean_of_distribution / self.variance_of_distribution
+            g_beta = self.mean_of_distribution / self.variance_of_distribution
 
-        g_alpha = self.mean_of_distribution * self.mean_of_distribution / self.variance_of_distribution
-        g_beta = self.mean_of_distribution / self.variance_of_distribution
         return random.gammavariate(g_alpha, 1 / g_beta)
 
     def pareto_multiple_items(self, sample_number=0):
@@ -66,9 +70,9 @@ class Trainer:
         prs = [int(i) for i in
                pareto_random_sample(alpha)]
 
-        print("Pareto:")
-        print("Original data: ", self.data)
-        print("Random sample: ", prs)
+        # print("Pareto:")
+        # print("Original data: ", self.data)
+        # print("Random sample: ", prs)
 
         # print("Original data: ", sorted(self.data))
         # print("Random sample: ", sorted(prs))
