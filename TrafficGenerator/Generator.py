@@ -8,6 +8,7 @@ from ModelGenerator.Modelify import Modelify
 from ModelGenerator.flow_list_attributes import FlowListAttribute
 from ModelGenerator.packet_list_attributes import PacketListAttribute
 from PacketMarshalling import Flow
+from TrafficGenerator.EditPcap import PcapEditor
 from TrafficGenerator.GenerateFlowFromModel import FlowGenerator
 
 
@@ -50,7 +51,7 @@ class Generator:
             time.sleep(interarrival)
             print("slept for ", interarrival)
 
-    def generate_new_packet(self, flow: Flow):
+    def generate_new_packet(self, flow: Flow, base_time=0):
         pla = PacketListAttribute(flow)
         # if not pla.item_size_list:
         #     print("no size? ****************************")
@@ -65,6 +66,8 @@ class Generator:
         # l4 = TCP()
         # packet = l2 / l3 / l4 / ("X" * packet_size)
         # TODO CREATE THE PACKETS!!!
+        pe = PcapEditor("./TestFiles/empty.pcap")
+        pe.publish_packet(ts=(packet_ts + base_time), packet_size=packet_size)
         packet = None
         return packet, packet_ts
 

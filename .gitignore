@@ -138,6 +138,7 @@ FeatureExtraction/TestFiles/test.pcap
 FeatureExtraction/TestFiles/
 test_iterator.py
 test_outputs/
+TrafficGenerator/TestFiles/
 
 # Record files
 PacketMarshalling/FlowRecords/
