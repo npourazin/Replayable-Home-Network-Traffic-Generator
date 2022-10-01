@@ -1,3 +1,6 @@
+import datetime
+import time
+
 import dpkt
 
 
@@ -13,7 +16,7 @@ class PcapMerger:
         self.addr_pcap_file_2 = addr_pcap_file_2
 
         self.pcap_file_1 = open(addr_pcap_file_1, 'rb')
-        self.pcap_file_2 = open(addr_pcap_file_1, 'rb')
+        self.pcap_file_2 = open(addr_pcap_file_2, 'rb')
 
         reader_1 = dpkt.pcap.Reader(self.pcap_file_1)
         for ts, buf in reader_1:
@@ -26,10 +29,13 @@ class PcapMerger:
         # sort by timestamp
         self.all_data = sorted(self.all_data, key=lambda x: x[0])
 
+        print(len(self.all_data))
         writer = dpkt.pcap.Writer(open("./TestFiles/out1.pcap", 'wb+'))
         for (ts, buf) in self.all_data:
+            # ts = datetime.datetime.now().timestamp()
             writer.writepkt(buf, ts)
+            # time.sleep(10)
 
 
 if __name__ == '__main__':
-    pm = PcapMerger("./TestFiles/single2.pcap", "./TestFiles/single1.pcap")
+    pm = PcapMerger("./TestFiles/single1.pcap", "./TestFiles/single2.pcap")

@@ -88,5 +88,6 @@ if __name__ == '__main__':
     ts0, *rest = out[0]
     ts1, *rest = out[len(out)-1]
     print(str(datetime.datetime.utcfromtimestamp(ts0)))
+    print(ts0)
     print(str(datetime.datetime.utcfromtimestamp(ts1)))
     print("time elapsed: {:.2f}s".format(time.time() - start_time))

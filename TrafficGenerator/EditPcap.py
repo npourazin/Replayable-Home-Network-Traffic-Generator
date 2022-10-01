@@ -1,7 +1,10 @@
+import datetime
 import random
+import time
 
 import dpkt
 
+sys_random = random.SystemRandom()
 
 class PcapEditor:
     file_addr = ""
@@ -21,7 +24,7 @@ class PcapEditor:
         if desired_packet_size > self.mtu:
             desired_packet_size = self.mtu
 
-        rand_buf = random.choice(self.samples)
+        rand_buf = sys_random.choice(self.samples)
         eth = dpkt.ethernet.Ethernet(rand_buf)
         ip_layer = eth.data
         previous_packet_size = len(ip_layer)
@@ -91,9 +94,9 @@ class PcapEditor:
 
             # now you can just cat
             new_app_layer = b'\x00' * addon
-            print(new_app_layer)
+            # print(new_app_layer)
             new_pac = eth_hdr + new_rawip + new_app_layer
-            print(new_pac)
+            # print(new_pac)
             # print(rand_buf[:])
             # for (attr, type, val) in ip_layer.__hdr__:
             #     if attr == 'len':
@@ -120,16 +123,22 @@ class PcapEditor:
 
 if __name__ == '__main__':
     pe = PcapEditor("./TestFiles/empty.pcap")
-    ts, pac = pe.publish_packet(ts=22.477363, desired_packet_size=64)
-    # print("The whole length: ", len(pac))
-    # print("The ip length: ", len(dpkt.ethernet.Ethernet(pac).data))
-    print(pac)
-    new_dpkt_pac = dpkt.ethernet.Ethernet(pac)
-    print(new_dpkt_pac)
-    # new_pac2 = dpkt.ip.IP(new_dpkt_pac[14:])
-    # print(new_pac2)
     writer = dpkt.pcap.Writer(pe.pcap_file)
-    writer.writepkt(new_dpkt_pac, ts=22.477363)
+    for i in range(0, 10):
+
+        ts = datetime.datetime.now().timestamp()
+        ts, pac = pe.publish_packet(ts=ts, desired_packet_size=64)
+        # print("The whole length: ", len(pac))
+        # print("The ip length: ", len(dpkt.ethernet.Ethernet(pac).data))
+        # print(pac)
+        new_dpkt_pac = dpkt.ethernet.Ethernet(pac)
+        print(new_dpkt_pac)
+        # new_pac2 = dpkt.ip.IP(new_dpkt_pac[14:])
+        # print(new_pac2)
+        writer.writepkt(new_dpkt_pac, ts=ts)
+        time.sleep(3)
+        # writer.close()
+        # pe.pcap_file.close()
     # print("'''''''''''''''''''''''''''''''''''''''''''")
     # print(type(pac))
     # print(pac)
