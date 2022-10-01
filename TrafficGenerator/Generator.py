@@ -67,7 +67,7 @@ class Generator:
         # packet = l2 / l3 / l4 / ("X" * packet_size)
         # TODO CREATE THE PACKETS!!!
         pe = PcapEditor("./TestFiles/empty.pcap")
-        pe.publish_packet(ts=(packet_ts + base_time), packet_size=packet_size)
+        pe.publish_packet(ts=(packet_ts + base_time), desired_packet_size=packet_size)
         packet = None
         return packet, packet_ts
 
