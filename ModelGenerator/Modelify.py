@@ -9,7 +9,10 @@ class Modelify:
     loader: LoadFlows = None
     pass
 
-    def __init__(self, addr):
+    def __init__(self, addr, flow_list=None):
+        if addr is None and flow_list is not None:
+            self.flow_list = flow_list
+            return
         self.load_flow_list(addr)
 
     def load_flow_list(self, addr):
@@ -18,8 +21,10 @@ class Modelify:
 
     def create_traffic_model(self):
         # self.load_flow_list(addr)
-
-        fla = FlowListAttribute(flow_list=self.flow_list, flow_obj_addr=self.loader.file_addr)
+        if self.loader is not None:
+            fla = FlowListAttribute(flow_list=self.flow_list, flow_obj_addr=self.loader.file_addr)
+        else:
+            fla = FlowListAttribute(flow_list=self.flow_list)
         # print("*******")
         # print(fla.item_size_list)
         # print(fla.item_intervals_list)

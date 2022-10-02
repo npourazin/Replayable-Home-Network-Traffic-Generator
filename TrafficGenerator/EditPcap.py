@@ -16,7 +16,7 @@ class PcapEditor:
         self.file_addr = file_addr
         # todo: check type
         self.pcap_file = open(file_addr, handle_type)
-        self.load_basic_tcp_packet("./TestFiles/samples.pcap")
+        self.load_basic_tcp_packet("../TrafficGenerator/TestFiles/samples.pcap")
 
     def publish_packet(self, desired_packet_size):
         if desired_packet_size < 40:

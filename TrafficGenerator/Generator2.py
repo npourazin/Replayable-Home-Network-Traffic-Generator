@@ -44,15 +44,18 @@ class Generator2:
         passed_time = 0
         file_counter = 1
         while True:
-            sizes, idles = self.create_new_flow()
-            print("Created flow.")
-            interarrival = self.fla.get_new_interval(distr="Gamma")
-            # todo files launch at 0 any ways so donttttttttttttttttttt nooooooo it works cuz 200 diff was between my two filessssssss
-            flow_launch_time = self.start_time + passed_time
-            self.launch_flow(sizes, idles, flow_launch_time, file_counter)
-            print("Launched flow.")
+            interarrival = self.flow_single_generation(passed_time=passed_time, file_counter=file_counter)
             passed_time += interarrival
             file_counter += 1
+
+    def flow_single_generation(self, passed_time, file_counter):
+        sizes, idles = self.create_new_flow()
+        print("Created flow.")
+        interarrival = self.fla.get_new_interval(distr="Gamma")
+        flow_launch_time = self.start_time + passed_time
+        self.launch_flow(sizes, idles, flow_launch_time, file_counter)
+        print("Launched flow.")
+        return interarrival
 
     def generate_new_packet(self, flow: Flow, base_time=0):
         pla = PacketListAttribute(flow)
@@ -82,8 +85,9 @@ class Generator2:
         print("     Sending out ", len(sizes), "packets!!")
 
         # make a thread and a pcap file with thread id name to write in
-        filename = "./TestFiles/temp" + str(outputfile_id) + ".pcap"
-        pe = PcapEditor(file_addr=filename)
+        # filename = "./TestFiles/temp" + str(outputfile_id) + ".pcap"
+        filename = "../TrafficGenerator/TestFiles/temp" + str(outputfile_id) + ".pcap"
+        pe = PcapEditor(file_addr=filename, handle_type="wb+")
         passed_time_in_flow = 0
         writer = dpkt.pcap.Writer(pe.pcap_file)
         print(idles)
