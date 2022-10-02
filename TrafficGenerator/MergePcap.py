@@ -14,17 +14,30 @@ class PcapMerger:
     def __init__(self, addr_pcap_file_1, addr_pcap_file_2):
         self.addr_pcap_file_1 = addr_pcap_file_1
         self.addr_pcap_file_2 = addr_pcap_file_2
+        self.merge()
 
-        self.pcap_file_1 = open(addr_pcap_file_1, 'rb')
-        self.pcap_file_2 = open(addr_pcap_file_2, 'rb')
+    def merge(self):
+        self.pcap_file_1 = open(self.addr_pcap_file_1, 'rb+')
+        self.pcap_file_2 = open(self.addr_pcap_file_2, 'rb+')
 
-        reader_1 = dpkt.pcap.Reader(self.pcap_file_1)
-        for ts, buf in reader_1:
-            self.all_data.append((ts, buf))
+        skip = 0
+        try:
+            reader_1 = dpkt.pcap.Reader(self.pcap_file_1)
+        except:
+            # file empty
+            skip = 1
+        if skip == 0:
+            for ts, buf in reader_1:
+                self.all_data.append((ts, buf))
 
-        reader_2 = dpkt.pcap.Reader(self.pcap_file_2)
-        for ts, buf in reader_2:
-            self.all_data.append((ts, buf))
+        skip = 0
+        try:
+            reader_2 = dpkt.pcap.Reader(self.pcap_file_2)
+        except:
+            skip = 1
+        if skip == 0:
+            for ts, buf in reader_2:
+                self.all_data.append((ts, buf))
 
         # sort by timestamp
         self.all_data = sorted(self.all_data, key=lambda x: x[0])
