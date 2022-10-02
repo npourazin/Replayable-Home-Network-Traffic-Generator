@@ -18,7 +18,7 @@ class PcapEditor:
         self.pcap_file = open(file_addr, handle_type)
         self.load_basic_tcp_packet("./TestFiles/samples.pcap")
 
-    def publish_packet(self, ts, desired_packet_size):
+    def publish_packet(self, desired_packet_size):
         if desired_packet_size < 40:
             desired_packet_size = 40
         if desired_packet_size > self.mtu:
@@ -112,7 +112,7 @@ class PcapEditor:
             # print(new_app_layer)
 
         # todo have a packet that you change the payload to set it's size
-        return ts, new_pac
+        return new_pac
 
     def load_basic_tcp_packet(self, sample_file):
         f = open(sample_file, 'rb')
@@ -127,7 +127,7 @@ if __name__ == '__main__':
     for i in range(0, 10):
 
         ts = datetime.datetime.now().timestamp()
-        ts, pac = pe.publish_packet(ts=ts, desired_packet_size=64)
+        pac = pe.publish_packet(desired_packet_size=64)
         # print("The whole length: ", len(pac))
         # print("The ip length: ", len(dpkt.ethernet.Ethernet(pac).data))
         # print(pac)

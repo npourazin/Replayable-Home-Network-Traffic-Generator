@@ -38,4 +38,4 @@ class PcapMerger:
 
 
 if __name__ == '__main__':
-    pm = PcapMerger("./TestFiles/single1.pcap", "./TestFiles/single2.pcap")
+    pm = PcapMerger("./TestFiles/temp1.pcap", "./TestFiles/temp2.pcap")
